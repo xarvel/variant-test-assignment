@@ -44,9 +44,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
     }
   }, [initialData, reset]);
 
-  const jobTitle = watch('jobTitle', '');
-  const company = watch('company', '');
-  const additionalDetails = watch('additionalDetails', '');
+  const jobTitle = watch('jobTitle', initialData?.jobTitle || '');
+  const company = watch('company', initialData?.company || '');
+  const additionalDetails = watch('additionalDetails', initialData?.additionalDetails || '');
 
   return (
     <FormSection>
