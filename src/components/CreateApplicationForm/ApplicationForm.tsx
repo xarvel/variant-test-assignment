@@ -23,9 +23,9 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
   showTryAgain = false,
 }) => {
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { isValid, errors },
+    formState: { isValid },
     watch,
     reset,
   } = useForm<FormData>({
@@ -46,7 +46,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
   const jobTitle = watch('jobTitle', initialData?.jobTitle || '');
   const company = watch('company', initialData?.company || '');
-  const additionalDetails = watch('additionalDetails', initialData?.additionalDetails || '');
 
   return (
     <FormSection>
@@ -60,9 +59,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
               label="Job title"
               placeholder="Product manager"
               isRequired
-              register={register}
-              error={!!errors.jobTitle}
-              value={jobTitle}
+              control={control}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -71,9 +68,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
               label="Company"
               placeholder="Apple"
               isRequired
-              register={register}
-              error={!!errors.company}
-              value={company}
+              control={control}
             />
           </Grid>
         </Grid>
@@ -83,9 +78,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
           label="I am good at..."
           placeholder="HTML, CSS and doing things in time"
           isRequired
-          register={register}
-          error={!!errors.skills}
-          value={watch('skills')}
+          control={control}
         />
 
         <FormField
@@ -95,9 +88,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
           isTextarea
           isRequired
           maxLength={MAX_ADDITIONAL_DETAILS_LENGTH}
-          register={register}
-          error={!!errors.additionalDetails}
-          value={additionalDetails}
+          control={control}
         />
 
         <FormActions

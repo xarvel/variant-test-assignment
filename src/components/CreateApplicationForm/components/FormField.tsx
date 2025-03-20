@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormGroup, Label, Input, CharCounterTypography } from '../styled';
-import { UseFormRegister } from 'react-hook-form';
+import { useController, Control } from 'react-hook-form';
 import { FormData } from '../../../store/applicationStore';
 
 interface FormFieldProps {
@@ -11,9 +11,7 @@ interface FormFieldProps {
   isTextarea?: boolean;
   rows?: number;
   maxLength?: number;
-  register: UseFormRegister<FormData>;
-  error?: boolean;
-  value?: string;
+  control: Control<FormData>;
 }
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -24,29 +22,34 @@ const FormField: React.FC<FormFieldProps> = ({
   isTextarea = false,
   rows = 6,
   maxLength,
-  register,
-  error,
-  value,
+  control,
 }) => {
+  const {
+    field: { ref, value = '', onChange },
+    fieldState: { error }
+  } = useController({
+    name: id,
+    control,
+    rules: {
+      required: isRequired,
+      maxLength: maxLength
+        ? {
+            value: maxLength,
+            message: `Maximum ${maxLength} characters allowed`,
+          }
+        : undefined,
+    },
+  });
+
   const baseProps = {
     id,
     'aria-required': isRequired,
-    'aria-invalid': error,
+    'aria-invalid': !!error,
     'aria-describedby': error ? `${id}-error` : undefined,
   };
 
-  const { ref, ...fieldProps } = register(id, {
-    required: isRequired,
-    maxLength: maxLength
-      ? {
-          value: maxLength,
-          message: `Maximum ${maxLength} characters allowed`,
-        }
-      : undefined,
-  });
-
   const styledProps = {
-    $hasError: error,
+    $hasError: !!error,
   };
 
   return (
@@ -61,8 +64,9 @@ const FormField: React.FC<FormFieldProps> = ({
         inputRef={ref}
         disableUnderline
         fullWidth
+        value={value}
+        onChange={onChange}
         {...baseProps}
-        {...fieldProps}
         {...styledProps}
       />
       {maxLength && (
