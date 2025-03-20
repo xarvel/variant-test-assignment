@@ -42,7 +42,7 @@ const ApplicationPreview: React.FC<ApplicationPreviewProps> = ({
           variant="text"
           color="secondary"
           onClick={handleCopyToClipboard}
-          endIcon={<CopyIcon width={20} height={20} />}
+          endIcon={<CopyIcon width={20} height={20} color='currentColor' />}
           disabled={isLoading}
         >
           {isCopied ? 'Copied!' : 'Copy to clipboard'}
