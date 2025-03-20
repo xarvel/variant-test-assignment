@@ -32,12 +32,7 @@ const FormField: React.FC<FormFieldProps> = ({
     control,
     rules: {
       required: isRequired,
-      maxLength: maxLength
-        ? {
-            value: maxLength,
-            message: `Maximum ${maxLength} characters allowed`,
-          }
-        : undefined,
+      maxLength
     },
   });
 
@@ -78,4 +73,4 @@ const FormField: React.FC<FormFieldProps> = ({
   );
 };
 
-export default FormField; 
+export default FormField;
