@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Grid2 as Grid } from '@mui/material';
 import { FormData } from '../../store/applicationStore';
@@ -27,7 +27,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
     handleSubmit,
     formState: { isValid },
     watch,
-    reset,
   } = useForm<FormData>({
     mode: 'onChange',
     defaultValues: {
@@ -37,12 +36,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
       additionalDetails: initialData?.additionalDetails || '',
     },
   });
-
-  useEffect(() => {
-    if (initialData) {
-      reset(initialData);
-    }
-  }, [initialData, reset]);
 
   const jobTitle = watch('jobTitle', initialData?.jobTitle || '');
   const company = watch('company', initialData?.company || '');
