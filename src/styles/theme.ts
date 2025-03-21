@@ -52,7 +52,7 @@ const baseTheme = createTheme({
     },
     h2: {
       fontWeight: 600,
-      fontSize: '28px',
+      fontSize: '36px',
       lineHeight: 1.3,
     },
     h3: {

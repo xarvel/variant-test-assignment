@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Layout
-import { RootLayout } from './RootLayout';
+import { RootLayout } from './layouts/RootLayout';
 
 // Loading component
 import LoadingOverlay from './components/LoadingOverlay';

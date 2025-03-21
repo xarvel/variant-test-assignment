@@ -11,7 +11,7 @@ const FormHeader: React.FC<FormHeaderProps> = ({ jobTitle, company }) => {
 
   return (
     <FormTitleTypography
-      variant="h3"
+      variant="h2"
       color={!(jobTitle && company) ? 'text.secondary' : 'text.primary'}
     >
       {formTitle}
@@ -19,4 +19,4 @@ const FormHeader: React.FC<FormHeaderProps> = ({ jobTitle, company }) => {
   );
 };
 
-export default FormHeader; 
+export default FormHeader;
