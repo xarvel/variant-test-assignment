@@ -1,6 +1,12 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import OpenAI from 'openai';
 
+import {
+  COVER_LETTER_SYSTEM_MESSAGE,
+  createStructuredTemplate,
+  createCoverLetterPrompt,
+} from '../src/constants/prompts';
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -13,6 +19,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { company, jobTitle, skills, additionalDetails } = req.body;
 
+    const template = createStructuredTemplate(company, jobTitle, skills, additionalDetails);
+    const prompt = createCoverLetterPrompt(company, jobTitle, skills, additionalDetails, template);
+
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       temperature: 0.7,
@@ -20,12 +29,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       messages: [
         {
           role: 'system',
-          content:
-            'You are a professional cover letter writer. Write a compelling cover letter based on the provided information.',
+          content: COVER_LETTER_SYSTEM_MESSAGE,
         },
         {
           role: 'user',
-          content: `Write a cover letter for ${company} for the position of ${jobTitle}. Skills: ${skills}. ${additionalDetails ? `Additional details: ${additionalDetails}` : ''}`,
+          content: prompt,
         },
       ],
     });
