@@ -6,7 +6,7 @@ import {
   createStructuredTemplate,
   createCoverLetterPrompt,
   OPENAI_CONFIG,
-} from './constants';
+} from './constants.ts';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
