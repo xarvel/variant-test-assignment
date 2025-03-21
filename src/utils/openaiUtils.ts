@@ -1,16 +1,4 @@
-import OpenAI from 'openai';
-import { ENV } from './env';
-import {
-  COVER_LETTER_SYSTEM_MESSAGE,
-  createStructuredTemplate,
-  createCoverLetterPrompt,
-  OPENAI_CONFIG
-} from '../constants/prompts';
-
-const openai = new OpenAI({
-  apiKey: ENV.OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+const API_URL = '/api/generate-cover-letter';
 
 export async function generateCoverLetter(
   company: string,
@@ -19,30 +7,27 @@ export async function generateCoverLetter(
   additionalDetails?: string
 ): Promise<string> {
   try {
-    const template = createStructuredTemplate(company, jobTitle, skills, additionalDetails);
-    const prompt = createCoverLetterPrompt(company, jobTitle, skills, additionalDetails, template);
-
-    const response = await openai.chat.completions.create({
-      ...OPENAI_CONFIG,
-      messages: [
-        {
-          role: 'system',
-          content: COVER_LETTER_SYSTEM_MESSAGE,
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        company,
+        jobTitle,
+        skills,
+        additionalDetails,
+      }),
     });
 
-    let generatedText =
-      response.choices[0]?.message.content ||
-      'Failed to generate a cover letter. Please try again.';
+    if (!response.ok) {
+      throw new Error('Failed to generate cover letter');
+    }
 
-    return generatedText;
+    const data = await response.json();
+    return data.coverLetter;
   } catch (error) {
-    console.error('Error generating cover letter with OpenAI:', error);
-    throw new Error('Failed to generate cover letter. Please check your API key and try again.');
+    console.error('Error generating cover letter:', error);
+    throw new Error('Failed to generate cover letter. Please try again.');
   }
 }
