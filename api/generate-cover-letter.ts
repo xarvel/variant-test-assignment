@@ -5,7 +5,8 @@ import {
   COVER_LETTER_SYSTEM_MESSAGE,
   createStructuredTemplate,
   createCoverLetterPrompt,
-} from '../src/constants/prompts';
+  OPENAI_CONFIG,
+} from '../src/constants';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -23,9 +24,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const prompt = createCoverLetterPrompt(company, jobTitle, skills, additionalDetails, template);
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      temperature: 0.7,
-      max_tokens: 500,
+      ...OPENAI_CONFIG,
       messages: [
         {
           role: 'system',
